@@ -5,52 +5,54 @@ import '../components/components.dart';
 class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            LoginHeader(),
-            Headline1(text: 'Login'),
-            Padding(
-              padding: const EdgeInsets.all(32),
-              child: Form(
-                child: Column(
-                  children: [
-                    TextFormField(
-                      decoration: InputDecoration(
-                          labelText: 'Email',
-                          icon: Icon(
-                            Icons.email,
-                            color: Theme.of(context).primaryColorLight,
-                          )),
-                      keyboardType: TextInputType.emailAddress,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0, bottom: 32),
-                      child: TextFormField(
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              LoginHeader(),
+              Headline1(text: 'Login'),
+              Padding(
+                padding: const EdgeInsets.all(32),
+                child: Form(
+                  child: Column(
+                    children: [
+                      TextFormField(
                         decoration: InputDecoration(
-                            labelText: 'Senha',
+                            labelText: 'Email',
                             icon: Icon(
-                              Icons.lock,
+                              Icons.email,
                               color: Theme.of(context).primaryColorLight,
                             )),
-                        obscureText: true,
+                        keyboardType: TextInputType.emailAddress,
                       ),
-                    ),
-                    RaisedButton(
-                      onPressed: () {},
-                      child: Text('Entrar'.toUpperCase()),
-                    ),
-                    FlatButton.icon(
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0, bottom: 32),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                              labelText: 'Senha',
+                              icon: Icon(
+                                Icons.lock,
+                                color: Theme.of(context).primaryColorLight,
+                              )),
+                          obscureText: true,
+                        ),
+                      ),
+                      RaisedButton(
                         onPressed: () {},
-                        icon: Icon(Icons.person),
-                        label: Text('Criar conta'))
-                  ],
+                        child: Text('Entrar'.toUpperCase()),
+                      ),
+                      FlatButton.icon(
+                          onPressed: () {},
+                          icon: Icon(Icons.person),
+                          label: Text('Criar conta'))
+                    ],
+                  ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );

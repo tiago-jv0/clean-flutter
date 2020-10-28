@@ -24,7 +24,7 @@ class LoginHeader extends StatelessWidget {
                 color: Colors.black)
           ]),
       child: Image(
-        image: AssetImage('libb/ui/assets/logo.png'),
+        image: AssetImage('lib/ui/assets/logo.png'),
       ),
     );
   }
