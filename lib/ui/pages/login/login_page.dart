@@ -42,14 +42,16 @@ class LoginPage extends StatelessWidget {
                           }),
                       Padding(
                         padding: const EdgeInsets.only(top: 8.0, bottom: 32),
-                        child: StreamBuilder<Object>(
+                        child: StreamBuilder<String>(
                             stream: presenter.passwordErrorStream,
                             builder: (context, snapshot) {
                               return TextFormField(
                                 onChanged: presenter.validatePassword,
                                 decoration: InputDecoration(
                                     labelText: 'Senha',
-                                    errorText: snapshot.data,
+                                    errorText: snapshot.data?.isEmpty == true
+                                        ? null
+                                        : snapshot.data,
                                     icon: Icon(
                                       Icons.lock,
                                       color:
