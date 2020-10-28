@@ -12,18 +12,22 @@ class LoginPresenterSpy extends Mock implements LoginPresenter {}
 void main() {
   LoginPresenter presenter;
   StreamController<String> emailErrorController;
-
+  StreamController<String> passwordErrorController;
   Future<void> loadPage(WidgetTester tester) async {
     presenter = LoginPresenterSpy();
     emailErrorController = StreamController<String>();
+    passwordErrorController = StreamController<String>();
     when(presenter.emailErrorStream)
         .thenAnswer((realInvocation) => emailErrorController.stream);
+    when(presenter.passwordErrorStream)
+        .thenAnswer((realInvocation) => passwordErrorController.stream);
     final loginPage = MaterialApp(home: LoginPage(presenter));
     await tester.pumpWidget(loginPage);
   }
 
   tearDown(() {
     emailErrorController.close();
+    passwordErrorController.close();
   });
 
   testWidgets('Should load with correct initial state',
@@ -101,5 +105,16 @@ void main() {
     expect(emailTextChildren, findsOneWidget,
         reason:
             'When a TextFormField has only one text child, means it has no errors, since one of the child is always the label text');
+  });
+
+  testWidgets('Should present an error if password is invalid',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    passwordErrorController.add('any_error');
+
+    await tester.pump();
+
+    expect(find.text('any_error'), findsOneWidget);
   });
 }
