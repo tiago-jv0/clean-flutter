@@ -9,12 +9,12 @@ class LoginState {
 class StreamLoginPresenter {
   final Validation validation;
 
-  final StreamController _controller = StreamController<LoginState>.broadcast();
+  final _controller = StreamController<LoginState>.broadcast();
 
   LoginState _state = LoginState();
 
   Stream<String> get emailErrorStream =>
-      _controller.stream.map((state) => state.emailError);
+      _controller.stream.map((state) => state.emailError).distinct();
 
   StreamLoginPresenter({@required this.validation});
 
