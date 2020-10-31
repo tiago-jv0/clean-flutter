@@ -49,7 +49,7 @@ void main() {
   setUp(() {
     validation = ValidationSpy();
     sut = StreamLoginPresenter(validation: validation);
-    final email = faker.internet.email();
+    email = faker.internet.email();
     mockValidation();
   });
   test('should call validation with correct email', () {
