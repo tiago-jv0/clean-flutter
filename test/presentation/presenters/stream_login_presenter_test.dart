@@ -2,6 +2,7 @@ import 'package:faker/faker.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
+import 'package:ForDev/domain/entities/account_entity.dart';
 import 'package:ForDev/domain/usecases/usecases.dart';
 
 import 'package:ForDev/presentation/presenters/presenters.dart';
@@ -13,7 +14,7 @@ class AuthenticationSpy extends Mock implements Authentication {}
 
 void main() {
   StreamLoginPresenter sut;
-  AuthenticationSpy authenticationSpy;
+  AuthenticationSpy authentication;
   ValidationSpy validation;
 
   String email;
@@ -23,20 +24,28 @@ void main() {
       field: field == null ? anyNamed('field') : field,
       value: anyNamed('value')));
 
+  PostExpectation mockAuthenticationCall() => when(authentication.auth(any));
+
+  void mockAuthentication() {
+    mockAuthenticationCall()
+        .thenAnswer((realInvocation) async => AccountEntity(faker.guid.guid()));
+  }
+
   void mockValidation({String field, String value}) {
     mockValidationCall(field).thenReturn(value);
   }
 
   setUp(() {
     validation = ValidationSpy();
-    authenticationSpy = AuthenticationSpy();
+    authentication = AuthenticationSpy();
     sut = StreamLoginPresenter(
-        validation: validation, authentication: authenticationSpy);
+        validation: validation, authentication: authentication);
 
     email = faker.internet.email();
     password = faker.internet.password();
 
     mockValidation();
+    mockAuthentication();
   });
   test('should call validation with correct email', () {
     sut.validateEmail(email);
@@ -128,8 +137,17 @@ void main() {
 
     await sut.auth();
 
-    verify(authenticationSpy
+    verify(authentication
             .auth(AuthenticationParams(email: email, secret: password)))
         .called(1);
+  });
+
+  test('should emit correct events on Authentication success', () async {
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+
+    await sut.auth();
   });
 }
