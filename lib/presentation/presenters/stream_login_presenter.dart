@@ -4,10 +4,8 @@ import 'package:meta/meta.dart';
 
 import '../../domain/helpers/domain_error.dart';
 import '../../domain/usecases/usecases.dart';
-
-import '../protocols/protocols.dart';
-
 import '../../ui/pages/pages.dart';
+import '../protocols/protocols.dart';
 
 class LoginState {
   String email;
