@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../components/components.dart';
 import '../pages.dart';
 
-import './components/components.dart';
+import 'components/components.dart';
 
 class LoginPage extends StatefulWidget {
   final LoginPresenter presenter;
