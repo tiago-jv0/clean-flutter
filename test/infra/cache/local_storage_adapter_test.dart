@@ -22,7 +22,7 @@ void main() {
     value = faker.guid.guid();
   });
 
-  group('save Secure', () {
+  group('Save Secure', () {
     test('Should call save secure with correct values', () async {
       await sut.saveSecure(key: key, value: value);
 
@@ -40,10 +40,25 @@ void main() {
   });
 
   group('Fetch Secure', () {
+    void mockFetchSecure() {
+      when(secureStorage.read(key: anyNamed('key')))
+          .thenAnswer((realInvocation) async => value);
+    }
+
+    setUp(() {
+      mockFetchSecure();
+    });
+
     test('Should call fetch secure with correct value', () async {
       await sut.fetchSecure(key);
 
       verify(secureStorage.read(key: key));
+    });
+
+    test('Should return correct value on success', () async {
+      final fetchedValue = await sut.fetchSecure(key);
+
+      expect(fetchedValue, value);
     });
   });
 }
