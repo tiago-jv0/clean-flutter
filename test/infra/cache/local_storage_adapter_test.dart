@@ -21,18 +21,29 @@ void main() {
     key = faker.lorem.word();
     value = faker.guid.guid();
   });
-  test('Should call save secura with correct values', () async {
-    await sut.saveSecure(key: key, value: value);
 
-    verify(secureStorage.write(key: key, value: value));
+  group('save Secure', () {
+    test('Should call save secure with correct values', () async {
+      await sut.saveSecure(key: key, value: value);
+
+      verify(secureStorage.write(key: key, value: value));
+    });
+
+    test('Should throw if save secure throws', () async {
+      when(secureStorage.write(key: anyNamed('key'), value: anyNamed('value')))
+          .thenThrow(Exception());
+
+      final future = sut.saveSecure(key: key, value: value);
+
+      expect(future, throwsA(TypeMatcher<Exception>()));
+    });
   });
 
-  test('Should throw if save secure throws', () async {
-    when(secureStorage.write(key: anyNamed('key'), value: anyNamed('value')))
-        .thenThrow(Exception());
+  group('Fetch Secure', () {
+    test('Should call fetch secure with correct value', () async {
+      await sut.fetchSecure(key);
 
-    final future = sut.saveSecure(key: key, value: value);
-
-    expect(future, throwsA(TypeMatcher<Exception>()));
+      verify(secureStorage.read(key: key));
+    });
   });
 }
