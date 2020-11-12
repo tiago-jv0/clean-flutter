@@ -1,20 +1,25 @@
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
+import '../../../domain/entities/entities.dart';
 import '../../../domain/helpers/helpers.dart';
 import '../../../domain/usecases/usecases.dart';
 
 import '../../http/http.dart';
+import '../../models/models.dart';
 
-class RemoteAddAccount {
+class RemoteAddAccount implements AddAccount {
   final HttpClient httpClient;
   final String url;
 
   RemoteAddAccount({@required this.httpClient, @required this.url});
 
-  Future<void> add(AddAccountParams params) async {
+  Future<AccountEntity> add(AddAccountParams params) async {
     try {
       final body = RemoteAddAccountParams.fromDomain(params).toJson();
-      await httpClient.request(url: url, method: 'post', body: body);
+      final httpResponse =
+          await httpClient.request(url: url, method: 'post', body: body);
+      return RemoteAccountModel.fromJson(httpResponse).toEntity();
     } on HttpError catch (error) {
       switch (error) {
         case HttpError.forbidden:
@@ -26,7 +31,7 @@ class RemoteAddAccount {
   }
 }
 
-class RemoteAddAccountParams {
+class RemoteAddAccountParams extends Equatable {
   final String name;
   final String email;
   final String password;
@@ -37,6 +42,9 @@ class RemoteAddAccountParams {
       @required this.name,
       @required this.password,
       @required this.passwordConfirmation});
+
+  @override
+  List get props => [name, email, password, passwordConfirmation];
 
   factory RemoteAddAccountParams.fromDomain(AddAccountParams params) {
     return RemoteAddAccountParams(
