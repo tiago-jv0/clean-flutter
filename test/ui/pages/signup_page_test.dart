@@ -125,6 +125,28 @@ void main() {
 
     expect(find.text('any_error'), findsOneWidget);
   });
+  testWidgets('Should present name error', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    nameErrorController.add('any_error');
+    await tester.pump();
+    expect(find.text('any_error'), findsOneWidget);
+
+    nameErrorController.add(null);
+    await tester.pump();
+    final nameTextChildren = find.descendant(
+        of: find.bySemanticsLabel('Nome'), matching: find.byType(Text));
+
+    expect(nameTextChildren, findsOneWidget,
+        reason:
+            'When a TextFormField has only one text child, means it has no errors, since one of the child is always the label text');
+
+    nameErrorController.add('');
+    await tester.pump();
+    expect(nameTextChildren, findsOneWidget,
+        reason:
+            'When a TextFormField has only one text child, means it has no errors, since one of the child is always the label text');
+  });
 
   testWidgets('Should present email error', (WidgetTester tester) async {
     await loadPage(tester);
@@ -145,6 +167,29 @@ void main() {
     emailErrorController.add('');
     await tester.pump();
     expect(emailTextChildren, findsOneWidget,
+        reason:
+            'When a TextFormField has only one text child, means it has no errors, since one of the child is always the label text');
+  });
+
+  testWidgets('Should present password error', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    passwordErrorController.add('any_error');
+    await tester.pump();
+    expect(find.text('any_error'), findsOneWidget);
+
+    passwordErrorController.add(null);
+    await tester.pump();
+    final passwordTextChildren = find.descendant(
+        of: find.bySemanticsLabel('Senha'), matching: find.byType(Text));
+
+    expect(passwordTextChildren, findsOneWidget,
+        reason:
+            'When a TextFormField has only one text child, means it has no errors, since one of the child is always the label text');
+
+    passwordErrorController.add('');
+    await tester.pump();
+    expect(passwordTextChildren, findsOneWidget,
         reason:
             'When a TextFormField has only one text child, means it has no errors, since one of the child is always the label text');
   });

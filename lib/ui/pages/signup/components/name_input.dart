@@ -13,12 +13,12 @@ class NameInput extends StatelessWidget {
       builder: (context, snapshot) {
         return TextFormField(
           decoration: InputDecoration(
-            labelText: 'Nome',
-            icon: Icon(
-              Icons.person,
-              color: Theme.of(context).primaryColorLight,
-            ),
-          ),
+              labelText: 'Nome',
+              icon: Icon(
+                Icons.person,
+                color: Theme.of(context).primaryColorLight,
+              ),
+              errorText: snapshot.data?.isEmpty == true ? null : snapshot.data),
           keyboardType: TextInputType.name,
           onChanged: presenter.validateName,
         );
