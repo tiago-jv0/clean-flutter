@@ -1,5 +1,6 @@
 import 'package:ForDev/data/http/http.dart';
 import 'package:ForDev/data/usecases/usecases.dart';
+import 'package:ForDev/domain/helpers/domain_error.dart';
 import 'package:ForDev/domain/usecases/usecases.dart';
 import 'package:faker/faker.dart';
 import 'package:mockito/mockito.dart';
@@ -12,6 +13,13 @@ void main() {
   AddAccountParams params;
   HttpClientSpy httpClient;
   RemoteAddAccount sut;
+
+  PostExpectation mockRequest() => when(httpClient.request(
+      url: anyNamed('url'), method: 'post', body: anyNamed('body')));
+
+  void mockHttpError(HttpError error) {
+    mockRequest().thenThrow(error);
+  }
 
   setUp(() {
     url = faker.internet.httpUrl();
@@ -33,5 +41,13 @@ void main() {
       'password': params.password,
       'passwordConfirmation': params.passwordConfirmation,
     }));
+  });
+
+  test('Should throw UnexpectedError if HttpClient returns 400', () async {
+    mockHttpError(HttpError.badRequest);
+
+    final future = sut.add(params);
+
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
