@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
-import '../pages.dart';
+import './login_presenter.dart';
 
 import 'components/components.dart';
 
