@@ -114,4 +114,38 @@ void main() {
     await tester.enterText(find.bySemanticsLabel('Confirmar senha'), password);
     verify(presenter.validatePasswordConfirmation(password));
   });
+
+  testWidgets('Should present an error if email is invalid',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    emailErrorController.add('any_error');
+
+    await tester.pump();
+
+    expect(find.text('any_error'), findsOneWidget);
+  });
+
+  testWidgets('Should present email error', (WidgetTester tester) async {
+    await loadPage(tester);
+
+    emailErrorController.add('any_error');
+    await tester.pump();
+    expect(find.text('any_error'), findsOneWidget);
+
+    emailErrorController.add(null);
+    await tester.pump();
+    final emailTextChildren = find.descendant(
+        of: find.bySemanticsLabel('Email'), matching: find.byType(Text));
+
+    expect(emailTextChildren, findsOneWidget,
+        reason:
+            'When a TextFormField has only one text child, means it has no errors, since one of the child is always the label text');
+
+    emailErrorController.add('');
+    await tester.pump();
+    expect(emailTextChildren, findsOneWidget,
+        reason:
+            'When a TextFormField has only one text child, means it has no errors, since one of the child is always the label text');
+  });
 }
