@@ -193,4 +193,29 @@ void main() {
         reason:
             'When a TextFormField has only one text child, means it has no errors, since one of the child is always the label text');
   });
+
+  testWidgets('Should present passwordConfirmation error',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    passwordConfirmationErrorController.add('any_error');
+    await tester.pump();
+    expect(find.text('any_error'), findsOneWidget);
+
+    passwordConfirmationErrorController.add(null);
+    await tester.pump();
+    final passwordConfirmationTextChildren = find.descendant(
+        of: find.bySemanticsLabel('Confirmar senha'),
+        matching: find.byType(Text));
+
+    expect(passwordConfirmationTextChildren, findsOneWidget,
+        reason:
+            'When a TextFormField has only one text child, means it has no errors, since one of the child is always the label text');
+
+    passwordConfirmationErrorController.add('');
+    await tester.pump();
+    expect(passwordConfirmationTextChildren, findsOneWidget,
+        reason:
+            'When a TextFormField has only one text child, means it has no errors, since one of the child is always the label text');
+  });
 }
