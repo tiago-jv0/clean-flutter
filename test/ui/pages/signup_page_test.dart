@@ -16,12 +16,14 @@ void main() {
   StreamController<String> emailErrorController;
   StreamController<String> passwordErrorController;
   StreamController<String> passwordConfirmationErrorController;
+  StreamController<bool> isFormValidController;
 
   void initStreams() {
     nameErrorController = StreamController<String>();
     emailErrorController = StreamController<String>();
     passwordErrorController = StreamController<String>();
     passwordConfirmationErrorController = StreamController<String>();
+    isFormValidController = StreamController<bool>();
   }
 
   void mockStreams() {
@@ -33,6 +35,8 @@ void main() {
         .thenAnswer((realInvocation) => passwordErrorController.stream);
     when(presenter.passwordConfirmationErrorStream).thenAnswer(
         (realInvocation) => passwordConfirmationErrorController.stream);
+    when(presenter.isFormValidStream)
+        .thenAnswer((realInvocation) => isFormValidController.stream);
   }
 
   void closeStreams() {
@@ -40,6 +44,7 @@ void main() {
     emailErrorController.close();
     passwordErrorController.close();
     passwordConfirmationErrorController.close();
+    isFormValidController.close();
   }
 
   Future<void> loadPage(WidgetTester tester) async {
@@ -217,5 +222,29 @@ void main() {
     expect(passwordConfirmationTextChildren, findsOneWidget,
         reason:
             'When a TextFormField has only one text child, means it has no errors, since one of the child is always the label text');
+  });
+
+  testWidgets('Should enable button if form is valid',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    isFormValidController.add(true);
+
+    await tester.pump();
+
+    final button = tester.widget<RaisedButton>(find.byType(RaisedButton));
+    expect(button.onPressed, isNotNull);
+  });
+
+  testWidgets('Should disable button if form is invalid',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    isFormValidController.add(false);
+
+    await tester.pump();
+
+    final button = tester.widget<RaisedButton>(find.byType(RaisedButton));
+    expect(button.onPressed, null);
   });
 }
