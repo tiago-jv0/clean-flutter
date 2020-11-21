@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../helpers/errors/errors.dart';
+import '../../../helpers/helpers.dart';
 import '../login_presenter.dart';
 
 class EmailInput extends StatelessWidget {
@@ -14,7 +14,7 @@ class EmailInput extends StatelessWidget {
           return TextFormField(
             onChanged: presenter.validateEmail,
             decoration: InputDecoration(
-                labelText: 'Email',
+                labelText: R.strings.email,
                 icon: Icon(
                   Icons.email,
                   color: Theme.of(context).primaryColorLight,
