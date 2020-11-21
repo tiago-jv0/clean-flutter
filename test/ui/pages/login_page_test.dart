@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ForDev/ui/helpers/errors/errors.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -13,17 +14,17 @@ class LoginPresenterSpy extends Mock implements LoginPresenter {}
 void main() {
   LoginPresenter presenter;
   StreamController<String> navigateToController;
-  StreamController<String> emailErrorController;
-  StreamController<String> passwordErrorController;
-  StreamController<String> mainErrorController;
+  StreamController<UIError> emailErrorController;
+  StreamController<UIError> passwordErrorController;
+  StreamController<UIError> mainErrorController;
   StreamController<bool> isFormValidController;
   StreamController<bool> isLoadingController;
 
   void initStreams() {
     navigateToController = StreamController<String>();
-    emailErrorController = StreamController<String>();
-    passwordErrorController = StreamController<String>();
-    mainErrorController = StreamController<String>();
+    emailErrorController = StreamController<UIError>();
+    passwordErrorController = StreamController<UIError>();
+    mainErrorController = StreamController<UIError>();
     isFormValidController = StreamController<bool>();
     isLoadingController = StreamController<bool>();
   }
@@ -114,11 +115,22 @@ void main() {
       (WidgetTester tester) async {
     await loadPage(tester);
 
-    emailErrorController.add('any_error');
+    emailErrorController.add(UIError.invalidField);
 
     await tester.pump();
 
-    expect(find.text('any_error'), findsOneWidget);
+    expect(find.text('Campo Inválido.'), findsOneWidget);
+  });
+
+  testWidgets('Should present an error if email is empty',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    emailErrorController.add(UIError.requiredField);
+
+    await tester.pump();
+
+    expect(find.text('Campo Obrigatório.'), findsOneWidget);
   });
 
   testWidgets('Should present no error if email is valid',
@@ -137,31 +149,15 @@ void main() {
             'When a TextFormField has only one text child, means it has no errors, since one of the child is always the label text');
   });
 
-  testWidgets('Should present no error if email is valid',
-      (WidgetTester tester) async {
-    await loadPage(tester);
-
-    emailErrorController.add('');
-
-    await tester.pump();
-
-    final emailTextChildren = find.descendant(
-        of: find.bySemanticsLabel('Email'), matching: find.byType(Text));
-
-    expect(emailTextChildren, findsOneWidget,
-        reason:
-            'When a TextFormField has only one text child, means it has no errors, since one of the child is always the label text');
-  });
-
   testWidgets('Should present an error if password is invalid',
       (WidgetTester tester) async {
     await loadPage(tester);
 
-    passwordErrorController.add('any_error');
+    passwordErrorController.add(UIError.requiredField);
 
     await tester.pump();
 
-    expect(find.text('any_error'), findsOneWidget);
+    expect(find.text('Campo Obrigatório.'), findsOneWidget);
   });
 
   testWidgets('Should present no error if password is valid',
@@ -169,22 +165,6 @@ void main() {
     await loadPage(tester);
 
     passwordErrorController.add(null);
-
-    await tester.pump();
-
-    final passwordTextChildren = find.descendant(
-        of: find.bySemanticsLabel('Senha'), matching: find.byType(Text));
-
-    expect(passwordTextChildren, findsOneWidget,
-        reason:
-            'When a TextFormField has only one text child, means it has no errors, since one of the child is always the label text');
-  });
-
-  testWidgets('Should present no error if password is valid',
-      (WidgetTester tester) async {
-    await loadPage(tester);
-
-    passwordErrorController.add('');
 
     await tester.pump();
 
@@ -265,11 +245,23 @@ void main() {
       (WidgetTester tester) async {
     await loadPage(tester);
 
-    mainErrorController.add('main error');
+    mainErrorController.add(UIError.invalidCredentials);
 
     await tester.pump();
 
-    expect(find.text('main error'), findsOneWidget);
+    expect(find.text('Credenciais inválidas.'), findsOneWidget);
+  });
+
+  testWidgets('Should Present error message if authentication throws',
+      (WidgetTester tester) async {
+    await loadPage(tester);
+
+    mainErrorController.add(UIError.unexpected);
+
+    await tester.pump();
+
+    expect(find.text('Algo errado aconteceu. Tente novamente em breve.'),
+        findsOneWidget);
   });
 
   testWidgets('Should change page', (WidgetTester tester) async {

@@ -23,7 +23,6 @@ class SplashPage extends StatelessWidget {
               Get.offAllNamed(page);
             }
           });
-
           return Center(
             child: CircularProgressIndicator(),
           );
