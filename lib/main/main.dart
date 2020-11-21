@@ -1,3 +1,4 @@
+import 'package:ForDev/utils/i18n/i18n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -6,6 +7,7 @@ import '../ui/components/components.dart';
 import 'factories/factories.dart';
 
 void main() {
+  R.load(Locale('pt', 'BR'));
   runApp(App());
 }
 
@@ -24,7 +26,7 @@ class App extends StatelessWidget {
         GetPage(
             name: '/login', page: makeLoginPage, transition: Transition.fadeIn),
         GetPage(
-            name: '/surverys',
+            name: '/surveys',
             page: () => Scaffold(
                   body: Center(
                     child: Text('Enquetes'),
