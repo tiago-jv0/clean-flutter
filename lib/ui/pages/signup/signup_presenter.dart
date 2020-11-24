@@ -1,10 +1,14 @@
+import 'package:ForDev/ui/helpers/helpers.dart';
+
 abstract class SignUpPresenter {
-  Stream<String> get nameErrorStream;
-  Stream<String> get emailErrorStream;
-  Stream<String> get passwordErrorStream;
-  Stream<String> get passwordConfirmationErrorStream;
+  Stream<UIError> get nameErrorStream;
+  Stream<UIError> get emailErrorStream;
+  Stream<UIError> get passwordErrorStream;
+  Stream<UIError> get passwordConfirmationErrorStream;
+  Stream<UIError> get mainErrorStream;
   Stream<bool> get isFormValidStream;
   Stream<bool> get isLoadingStream;
+
   void validateEmail(String email);
   void validateName(String name);
   void validatePassword(String password);
