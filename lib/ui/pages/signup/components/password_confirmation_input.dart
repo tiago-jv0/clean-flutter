@@ -1,3 +1,4 @@
+import 'package:ForDev/ui/helpers/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +14,7 @@ class PasswordConfirmationInput extends StatelessWidget {
       builder: (context, snapshot) {
         return TextFormField(
           decoration: InputDecoration(
-              labelText: 'Confirmar senha',
+              labelText: R.strings.confirmPassword,
               icon: Icon(
                 Icons.person,
                 color: Theme.of(context).primaryColorLight,

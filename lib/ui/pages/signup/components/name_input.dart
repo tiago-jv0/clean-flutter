@@ -1,3 +1,4 @@
+import 'package:ForDev/ui/helpers/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +14,7 @@ class NameInput extends StatelessWidget {
       builder: (context, snapshot) {
         return TextFormField(
           decoration: InputDecoration(
-              labelText: 'Nome',
+              labelText: R.strings.name,
               icon: Icon(
                 Icons.person,
                 color: Theme.of(context).primaryColorLight,
