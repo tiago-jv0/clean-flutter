@@ -40,6 +40,10 @@ void main() {
 
   PostExpectation mockAddAccountCall() => when(addAccount.add(any));
 
+  void mockAddAccountError(DomainError error) {
+    mockAddAccountCall().thenThrow(error);
+  }
+
   void mockAddAccount() {
     mockAddAccountCall().thenAnswer((_) async => AccountEntity(token));
   }
@@ -306,6 +310,36 @@ void main() {
     sut.validatePasswordConfirmation(passwordConfirmation);
 
     expectLater(sut.isLoadingStream, emits(true));
+
+    await sut.signUp();
+  });
+
+  test('should emit correct events on EmailInUseError', () async {
+    mockAddAccountError(DomainError.emailInUse);
+
+    sut.validateName(name);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    sut.validatePasswordConfirmation(passwordConfirmation);
+
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    sut.mainErrorStream
+        .listen(expectAsync1((error) => expect(error, UIError.emailInUse)));
+
+    await sut.signUp();
+  });
+
+  test('should emit correct events on UnexpectedError', () async {
+    mockAddAccountError(DomainError.unexpected);
+
+    sut.validateName(name);
+    sut.validateEmail(email);
+    sut.validatePassword(password);
+    sut.validatePasswordConfirmation(passwordConfirmation);
+
+    expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+    sut.mainErrorStream
+        .listen(expectAsync1((error) => expect(error, UIError.unexpected)));
 
     await sut.signUp();
   });
