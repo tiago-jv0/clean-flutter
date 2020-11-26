@@ -204,7 +204,7 @@ void main() {
     sut.validatePassword(password);
 
     sut.navigateToStream
-        .listen(expectAsync1((page) => expect(page, '/surverys')));
+        .listen(expectAsync1((page) => expect(page, '/surveys')));
     await sut.auth();
   });
 
