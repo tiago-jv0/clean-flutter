@@ -16,6 +16,7 @@ dependencies:
   get:
   equatable: ^1.2.3
   flutter_secure_storage: 
+  carousel_slider:
 
 dev_dependencies:
   flutter_test:
@@ -24,6 +25,7 @@ dev_dependencies:
   test:
   mockito:
   faker:
+
   
 flutter:
   uses-material-design: true
