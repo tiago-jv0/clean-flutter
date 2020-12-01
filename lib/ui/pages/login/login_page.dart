@@ -27,7 +27,7 @@ class LoginPage extends StatelessWidget {
       child: Scaffold(
         body: Builder(builder: (context) {
           presenter.isLoadingStream.listen((bool isLoading) {
-            if (isLoading) {
+            if (isLoading == true) {
               showLoading(context);
             } else {
               hideLoading(context);
