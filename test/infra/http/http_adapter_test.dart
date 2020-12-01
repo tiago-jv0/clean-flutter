@@ -50,12 +50,14 @@ void main() {
       await sut
           .request(url: url, method: 'post', body: {'any_key': 'any_value'});
 
-      verify(client.post(url,
-          headers: {
-            'content-type': 'application/json',
-            'accept': 'application/json'
-          },
-          body: '{"any_key":"any_value"}'));
+      verify(
+        client.post(url,
+            headers: {
+              'content-type': 'application/json',
+              'accept': 'application/json'
+            },
+            body: '{"any_key":"any_value"}'),
+      );
     });
 
     test('should call POST without body', () async {
@@ -181,6 +183,32 @@ void main() {
       );
 
       expect(future, throwsA(HttpError.serverError));
+    });
+  });
+
+  group('Get', () {
+    PostExpectation mockRequest() =>
+        when(client.get(any, headers: anyNamed('headers')));
+
+    void mockResponse(int statusCode,
+        {String body = '{"any_key":"any_value"}'}) {
+      mockRequest()
+          .thenAnswer((realInvocation) async => Response(body, statusCode));
+    }
+
+    setUp(() {
+      mockResponse(200);
+    });
+    test('should call GET with correct values', () async {
+      await sut.request(url: url, method: 'get');
+
+      verify(client.get(
+        url,
+        headers: {
+          'content-type': 'application/json',
+          'accept': 'application/json'
+        },
+      )).called(1);
     });
   });
 }
