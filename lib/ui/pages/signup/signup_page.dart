@@ -74,9 +74,10 @@ class SignUpPage extends StatelessWidget {
                             ),
                             SignUpButton(),
                             FlatButton.icon(
-                                onPressed: presenter.goToLogin,
-                                icon: Icon(Icons.exit_to_app),
-                                label: Text(R.strings.login))
+                              onPressed: presenter.goToLogin,
+                              icon: Icon(Icons.exit_to_app),
+                              label: Text(R.strings.login),
+                            )
                           ],
                         ),
                       ),
