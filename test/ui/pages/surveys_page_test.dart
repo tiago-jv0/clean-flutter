@@ -53,9 +53,9 @@ void main() {
   List<SurveyViewModel> makesurveys() {
     return [
       SurveyViewModel(
-          id: '1', question: 'Question 1', date: 'Any date', didAnswer: true),
+          id: '1', question: 'Question 1', date: 'Date 1', didAnswer: true),
       SurveyViewModel(
-          id: '2', question: 'Question 2', date: 'Any date', didAnswer: false),
+          id: '2', question: 'Question 2', date: 'Date 2', didAnswer: false),
     ];
   }
 
@@ -109,7 +109,11 @@ void main() {
     expect(find.text('Algo errado aconteceu. Tente novamente em breve.'),
         findsNothing);
     expect(find.text('Recarregar'), findsNothing);
+
     expect(find.text('Question 1'), findsOneWidget);
     expect(find.text('Question 2'), findsWidgets);
+
+    expect(find.text('Date 1'), findsOneWidget);
+    expect(find.text('Date 2'), findsWidgets);
   });
 }
