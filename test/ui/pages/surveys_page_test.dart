@@ -13,23 +13,23 @@ void main() {
   SurveysPresenterSpy presenter;
 
   StreamController<bool> isLoadingController;
-  StreamController<List<SurveyViewModel>> loadSurveysController;
+  StreamController<List<SurveyViewModel>> surveysController;
 
   void initStreams() {
     isLoadingController = StreamController<bool>();
-    loadSurveysController = StreamController<List<SurveyViewModel>>();
+    surveysController = StreamController<List<SurveyViewModel>>();
   }
 
   void mockStreams() {
     when(presenter.isLoadingStream)
         .thenAnswer((realInvocation) => isLoadingController.stream);
-    when(presenter.loadSurveysStream)
-        .thenAnswer((realInvocation) => loadSurveysController.stream);
+    when(presenter.surveysStream)
+        .thenAnswer((realInvocation) => surveysController.stream);
   }
 
   void closeStreams() {
     isLoadingController.close();
-    loadSurveysController.close();
+    surveysController.close();
   }
 
   Future<void> loadPage(WidgetTester tester) async {
@@ -90,7 +90,7 @@ void main() {
       (WidgetTester tester) async {
     await loadPage(tester);
 
-    loadSurveysController.addError(UIError.unexpected.description);
+    surveysController.addError(UIError.unexpected.description);
     await tester.pump();
 
     expect(find.text('Algo errado aconteceu. Tente novamente em breve.'),
@@ -103,7 +103,7 @@ void main() {
       (WidgetTester tester) async {
     await loadPage(tester);
 
-    loadSurveysController.add(makesurveys());
+    surveysController.add(makesurveys());
     await tester.pump();
 
     expect(find.text('Algo errado aconteceu. Tente novamente em breve.'),
@@ -121,7 +121,7 @@ void main() {
       (WidgetTester tester) async {
     await loadPage(tester);
 
-    loadSurveysController.addError(UIError.unexpected.description);
+    surveysController.addError(UIError.unexpected.description);
     await tester.pump();
 
     await tester.tap(find.text('Recarregar'));
