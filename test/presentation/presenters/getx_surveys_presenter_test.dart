@@ -1,49 +1,16 @@
-import 'package:ForDev/domain/helpers/domain_error.dart';
-import 'package:ForDev/ui/helpers/errors/errors.dart';
 import 'package:faker/faker.dart';
-import 'package:get/get.dart';
-import 'package:meta/meta.dart';
+
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
-import 'package:intl/intl.dart';
+
+import 'package:ForDev/domain/helpers/helpers.dart';
 import 'package:ForDev/domain/entities/entities.dart';
 import 'package:ForDev/domain/usecases/usecases.dart';
 
 import 'package:ForDev/ui/pages/pages.dart';
+import 'package:ForDev/ui/helpers/helpers.dart';
 
-class GetXSurveysPresenter extends GetX {
-  final LoadSurveys loadSurveys;
-
-  final _isLoading = true.obs;
-  final _surveys = Rx<List<SurveyViewModel>>();
-
-  GetXSurveysPresenter({@required this.loadSurveys});
-
-  Stream<bool> get isLoadingStream => _isLoading.stream;
-  Stream<List<SurveyViewModel>> get surveysStream => _surveys.stream;
-
-  Future<void> loadData() async {
-    try {
-      _isLoading.value = true;
-
-      final surveys = await loadSurveys.load();
-      _surveys.value = surveys
-          .map(
-            (survey) => SurveyViewModel(
-              id: survey.id,
-              question: survey.question,
-              date: DateFormat('dd MMM yyyy').format(survey.dateTime),
-              didAnswer: survey.didAnswer,
-            ),
-          )
-          .toList();
-    } on DomainError {
-      _surveys.subject.addError(UIError.unexpected.description);
-    } finally {
-      _isLoading.value = false;
-    }
-  }
-}
+import 'package:ForDev/presentation/presenters/getx_surveys_presenter.dart';
 
 class LoadSurveysSpy extends Mock implements LoadSurveys {}
 
