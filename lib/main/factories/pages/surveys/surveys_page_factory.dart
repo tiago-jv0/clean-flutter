@@ -1,5 +1,8 @@
-import 'package:flutter/cupertino.dart';
+import 'package:ForDev/main/factories/factories.dart';
+import 'package:flutter/widgets.dart';
 
 import '../../../../ui/pages/pages.dart';
 
-Widget makeSurveysPage() => SurveysPage();
+Widget makeSurveysPage() => SurveysPage(
+      presenter: makeGetXSurveysPresenter(),
+    );
